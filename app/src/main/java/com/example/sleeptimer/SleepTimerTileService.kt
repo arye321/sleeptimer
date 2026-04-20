@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.service.quicksettings.TileService
+import android.widget.Toast
 
 class SleepTimerTileService : TileService() {
 
@@ -23,6 +24,8 @@ class SleepTimerTileService : TileService() {
                 action = TimerService.ACTION_STOP
             }
             startService(stopIntent)
+            Toast.makeText(this, "Timer Stopped", Toast.LENGTH_SHORT).show()
+
         } else {
             // Start the timer with saved defaults
             if (durationMillis > 0) {
@@ -35,6 +38,8 @@ class SleepTimerTileService : TileService() {
                 } else {
                     startService(serviceIntent)
                 }
+                Toast.makeText(this, "Started sleep timer.", Toast.LENGTH_SHORT).show()
+
             }
 
 

@@ -69,6 +69,7 @@ class TimerService : Service() {
     }
 
     private fun startTimer(durationMillis: Long) {
+
         // Acquire wake lock to keep timer running
         val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         wakeLock = powerManager.newWakeLock(
@@ -146,6 +147,7 @@ class TimerService : Service() {
 
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
+
     }
 
     private fun performSleepActions() {
