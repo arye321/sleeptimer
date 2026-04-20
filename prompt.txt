@@ -1,0 +1,22 @@
+Make a sleep timer app for android.
+
+when opening app it shows a timer, the timer is hh:mm:ss
+
+the app remembers the last timer data the user put and it will be the default untill changed.
+
+theres a start button, when clicked it starts the timer and the timer will count down, show a notification that shows the timer and a pause and stop button, when pause is clicked it pauses the timer and the notification will show the timer and a resume button, when clicked it resumes the timer and the notification will show the timer and a pause button. when stop is clicked, stop the timer (and hide notification).
+
+
+timer continues even when app minimized
+
+when the timer reaches 00:00:00 it will slowly lower the media volume to 0 and stop all media playeing and turn off the screen or lock the phone if possible.
+
+theres a reset button, when clicked it resets the timer to the default data.
+
+
+the notification shows even when the app is minimized/in the background
+
+the notification shows even if the phone is locked 
+
+the app has a Quick Settings Tile button that starts the app if its closed and starts the defualt timer
+
