@@ -175,7 +175,7 @@ class TimerService : Service() {
                 audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, 0)
             } catch (_: Exception) { }
 
-            // Try to pause media playback by dispatching media key events
+            // Try to pause media playback by stealing audio focus
             try {
                 audioManager.requestAudioFocus(
                     null,
@@ -183,6 +183,27 @@ class TimerService : Service() {
                     AudioManager.AUDIOFOCUS_GAIN
                 )
             } catch (_: Exception) { }
+
+            // Wait a moment for media to actually stop
+            Thread.sleep(500)
+
+            // Restore volume back to what it was before the timer
+            try {
+                val restoreVolume = if (originalVolume >= 0) originalVolume else currentVolume
+                audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, restoreVolume, 0)
+            } catch (_: Exception) { }
+
+            // Minimize all apps - go to home screen
+            try {
+                val homeIntent = Intent(Intent.ACTION_MAIN).apply {
+                    addCategory(Intent.CATEGORY_HOME)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(homeIntent)
+            } catch (_: Exception) { }
+
+            // Small delay before locking so the home screen transition completes
+            Thread.sleep(300)
 
             // Try to lock the screen
             try {
