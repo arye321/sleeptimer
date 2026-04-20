@@ -6,12 +6,14 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.app.admin.DevicePolicyManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.os.CountDownTimer
 import android.os.IBinder
 import android.os.PowerManager
+import android.service.quicksettings.TileService
 import androidx.core.app.NotificationCompat
 
 class TimerService : Service() {
@@ -105,6 +107,7 @@ class TimerService : Service() {
         }.start()
 
         onStateChangeListener?.invoke(true, false)
+        updateTileState(this)
     }
 
     private fun pauseTimer() {
@@ -144,6 +147,7 @@ class TimerService : Service() {
 
         releaseWakeLock()
         onStateChangeListener?.invoke(false, false)
+        updateTileState(this)
 
         stopForeground(STOP_FOREGROUND_REMOVE)
         stopSelf()
@@ -223,6 +227,7 @@ class TimerService : Service() {
             isPaused = false
             releaseWakeLock()
             onStateChangeListener?.invoke(false, false)
+            updateTileState(this@TimerService)
 
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
@@ -325,11 +330,21 @@ class TimerService : Service() {
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
+    private fun updateTileState(context: Context) {
+        try {
+            TileService.requestListeningState(
+                context,
+                ComponentName(context, SleepTimerTileService::class.java)
+            )
+        } catch (_: Exception) { }
+    }
+
     override fun onDestroy() {
         countDownTimer?.cancel()
         releaseWakeLock()
         isRunning = false
         isPaused = false
+        updateTileState(this)
         super.onDestroy()
     }
 }

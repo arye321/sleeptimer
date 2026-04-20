@@ -41,9 +41,9 @@ class SleepTimerTileService : TileService() {
                 Toast.makeText(this, "Started sleep timer.", Toast.LENGTH_SHORT).show()
 
             }
-
-
         }
+        // Force an immediate update of the UI
+        updateTile()
     }
 
     override fun onStartListening() {
@@ -53,7 +53,15 @@ class SleepTimerTileService : TileService() {
 
     private fun updateTile() {
         val tile = qsTile ?: return
-        tile.label = "Sleep Timer"
+        
+        if (TimerService.isRunning) {
+            tile.state = android.service.quicksettings.Tile.STATE_ACTIVE
+            tile.label = "Timer Running"
+        } else {
+            tile.state = android.service.quicksettings.Tile.STATE_INACTIVE
+            tile.label = "Sleep Timer"
+        }
+        
         tile.updateTile()
     }
 }
